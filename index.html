@@ -88,5 +88,45 @@
       <p class="footer__copyright">© 2021 Mesto Russia</p>
     </footer>
   </div>
+  <div class="popup">
+    <div class="popup__container">
+      <form class="popup__form" name="bio">
+        <h2 class="popup__title">Редактировать профиль</h2>
+        <input class="popup__input" type="text" id="name" name="name" placeholder="Жак-Ив Кусто" required>
+        <input class="popup__input" type="text" id="description" name="description" placeholder="Исследователь океана" required>
+        <button class="popup__button" name="bio" type="submit">Сохранить</button>
+      </form>
+      <a class="popup__close" href="#">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M32 28.8L19.2 16L32 3.2L28.8 0L16 12.8L3.2 0L0 3.2L12.8 16L0 28.8L3.2 32L16 19.2L28.8 32L32 28.8Z" fill="white"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <script>
+    let editButton = document.querySelector('.profile__edit-button');
+    let popup = document.querySelector('.popup');
+    let popupClose = document.querySelector('.popup__close');
+    let formElement = document.querySelector('.popup__form');
+
+    function switchPopup() {
+      popup.classList.toggle('popup_opened');
+    }
+
+    function changeProfile(evt) {
+      evt.preventDefault();
+      let name = document.querySelector('#name');
+      let description = document.querySelector('#description');
+      let profileName = document.querySelector('.profile__name');
+      let profileDescription = document.querySelector('.profile__description');
+      profileName.textContent = name.value;
+      profileDescription.textContent = description.value;
+      switchPopup();
+    }
+
+    formElement.addEventListener('submit', changeProfile);
+    editButton.addEventListener('click', switchPopup);
+    popupClose.addEventListener('click', switchPopup);
+  </script>
 </body>
 </html>
