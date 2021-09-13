@@ -2,3 +2,9 @@
   max-width: 880px;
   margin: 0 auto;
 }
+
+@media screen and (max-width: 997px) {
+  .page__container {
+    width: calc(100% - 100px);
+  }
+}
