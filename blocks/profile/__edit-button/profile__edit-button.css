@@ -5,10 +5,12 @@
   height: 24px;
   background-size: contain;
   align-self: center;
+  transition: all ease-in-out 0.3s;
 }
 
 .profile__edit-button:hover {
   opacity: 0.6;
+  transform: scale(1.05);
 }
 
 @media screen and (max-width: 799px) {

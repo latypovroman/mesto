@@ -4,10 +4,12 @@
   width: 150px;
   height: 50px;
   background-size: contain;
+  transition: all ease-in-out 0.3s;
 }
 
 .profile__add-button:hover {
   opacity: 0.6;
+  transform: scale(1.03);
 }
 
 @media screen and (max-width: 677px) {
