@@ -6,9 +6,16 @@
   padding-bottom: 18px;
   border-radius: 2px;
   border: none;
+  transition: ease-in-out 0.3s;
 }
 
 .popup__button:hover {
   opacity: 0.8;
   cursor: pointer;
+}
+
+@media screen and (max-width: 677px) {
+  .popup__button {
+    margin-top: 45px;
+  }
 }
