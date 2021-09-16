@@ -6,4 +6,7 @@
   height: 100vh;
   z-index: 0;
   display: none;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
 }

@@ -3,6 +3,10 @@ let popup = document.querySelector('.popup');
 let popupClose = document.querySelector('.popup__close');
 let formElement = document.querySelector('.popup__form');
 let page = document.querySelector('.page');
+let name = document.querySelector('#name');
+let description = document.querySelector('#description');
+let profileName = document.querySelector('.profile__name');
+let profileDescription = document.querySelector('.profile__description');
 
 function switchPopup() {
   popup.classList.toggle('popup_opened');
@@ -11,10 +15,6 @@ function switchPopup() {
 
 function changeProfile(evt) {
   evt.preventDefault();
-  let name = document.querySelector('#name');
-  let description = document.querySelector('#description');
-  let profileName = document.querySelector('.profile__name');
-  let profileDescription = document.querySelector('.profile__description');
   profileName.textContent = name.value;
   profileDescription.textContent = description.value;
   switchPopup();

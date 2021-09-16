@@ -18,57 +18,59 @@
       <section class="profile">
         <div class="profile__content">
           <img class="profile__image" src="./images/avatar.jpg" alt="Аватар пользователя">
-              <div class="profile__text">
-                <h1 class="profile__name">Жак-Ив Кусто</h1>
-                <a class="profile__edit-button" href="#"></a>
-                <p class="profile__description">Исследователь океана</p>
-              </div>
+            <div class="profile__text">
+              <h1 class="profile__name">Жак-Ив Кусто</h1>
+              <button class="profile__edit-button" type="button"></button>
+              <p class="profile__description">Исследователь океана</p>
+            </div>
         </div>
-        <a class="profile__add-button" href="#"></a>
+        <button class="profile__add-button" type="button"></button>
       </section>
       <section class="cards">
-        <div class="card">
-          <img class="card__image" src="./images/dombai.jpg" alt="Домбай">
-          <div class="card__panel">
-            <h2 class="card__title">Домбай</h2>
-            <a class="card__like" href="#"></a>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card__image" src="./images/elbrus.jpg" alt="Эльбрус">
-          <div class="card__panel">
-            <h2 class="card__title">Эльбрус</h2>
-            <a class="card__like" href="#"></a>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card__image" src="./images/karach.jpg" alt="Карачаевск">
-          <div class="card__panel">
-            <h2 class="card__title">Карачаево-Черкесия</h2>
-            <a class="card__like" href="#"></a>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card__image" src="./images/luna.jpg" alt="Луна">
-          <div class="card__panel">
-            <h2 class="card__title">Луна</h2>
-            <a class="card__like" href="#"></a>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card__image" src="./images/magadan.jpg" alt="Магадан">
-          <div class="card__panel">
-            <h2 class="card__title">Магадан</h2>
-            <a class="card__like" href="#"></a>
-          </div>
-        </div>
-        <div class="card">
-          <img class="card__image" src="./images/syberia.jpg" alt="Сибирь">
-          <div class="card__panel">
-            <h2 class="card__title">Сибирь</h2>
-            <a class="card__like" href="#"></a>
-          </div>
-        </div>
+        <ul class="cards__list">
+          <li class="card">
+            <img class="card__image" src="./images/dombai.jpg" alt="Домбай">
+            <div class="card__panel">
+              <h2 class="card__title">Домбай</h2>
+              <button class="card__like" type="button"></button>
+            </div>
+          </li>
+          <li class="card">
+            <img class="card__image" src="./images/elbrus.jpg" alt="Эльбрус">
+            <div class="card__panel">
+              <h2 class="card__title">Эльбрус</h2>
+              <button class="card__like" type="button"></button>
+            </div>
+          </li>
+          <li class="card">
+            <img class="card__image" src="./images/karach.jpg" alt="Карачаевск">
+            <div class="card__panel">
+              <h2 class="card__title">Карачаево-Черкесия</h2>
+              <button class="card__like" type="button"></button>
+            </div>
+          </li>
+          <li class="card">
+            <img class="card__image" src="./images/luna.jpg" alt="Луна">
+            <div class="card__panel">
+              <h2 class="card__title">Луна</h2>
+              <button class="card__like" type="button"></button>
+            </div>
+          </li>
+          <li class="card">
+            <img class="card__image" src="./images/magadan.jpg" alt="Магадан">
+            <div class="card__panel">
+              <h2 class="card__title">Магадан</h2>
+              <button class="card__like" type="button"></button>
+            </div>
+          </li>
+          <li class="card">
+            <img class="card__image" src="./images/syberia.jpg" alt="Сибирь">
+            <div class="card__panel">
+              <h2 class="card__title">Сибирь</h2>
+              <button class="card__like" type="button"></button>
+            </div>
+          </li>
+        </ul>
       </section>
     </main>
     <footer class="footer">
@@ -77,13 +79,13 @@
   </div>
   <div class="popup">
     <div class="popup__container">
+      <h2 class="popup__title">Редактировать профиль</h2>
       <form class="popup__form" name="bio">
-        <h2 class="popup__title">Редактировать профиль</h2>
         <input class="popup__input" type="text" id="name" name="name" placeholder="Жак-Ив Кусто" required>
         <input class="popup__input" type="text" id="description" name="description" placeholder="Исследователь океана" required>
         <button class="popup__button" name="bio" type="submit">Сохранить</button>
       </form>
-      <a class="popup__close" href="#"></a>
+      <button class="popup__close" type="button"></button>
     </div>
   </div>
   <script src="js/script.js"></script>

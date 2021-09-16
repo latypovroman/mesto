@@ -6,6 +6,9 @@
   background-size: contain;
   align-self: center;
   transition: all ease-in-out 0.3s;
+  border: none;
+  background-color: black;
+  cursor: pointer;
 }
 
 .profile__edit-button:hover {
