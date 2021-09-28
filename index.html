@@ -25,67 +25,48 @@
       </div>
       <button class="profile__add-button" type="button"></button>
     </section>
-    <section class="cards">
+    <section class="cards" aria-label="Места России">
       <ul class="cards__list">
-        <li class="card">
-          <img class="card__image" src="./images/dombai.jpg" alt="Домбай">
-          <div class="card__panel">
-            <h2 class="card__title">Домбай</h2>
-            <button class="card__like" type="button"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/elbrus.jpg" alt="Эльбрус">
-          <div class="card__panel">
-            <h2 class="card__title">Эльбрус</h2>
-            <button class="card__like" type="button"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/karach.jpg" alt="Карачаевск">
-          <div class="card__panel">
-            <h2 class="card__title">Карачаево-Черкесия</h2>
-            <button class="card__like" type="button"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/luna.jpg" alt="Луна">
-          <div class="card__panel">
-            <h2 class="card__title">Луна</h2>
-            <button class="card__like" type="button"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/magadan.jpg" alt="Магадан">
-          <div class="card__panel">
-            <h2 class="card__title">Магадан</h2>
-            <button class="card__like" type="button"></button>
-          </div>
-        </li>
-        <li class="card">
-          <img class="card__image" src="./images/syberia.jpg" alt="Сибирь">
-          <div class="card__panel">
-            <h2 class="card__title">Сибирь</h2>
-            <button class="card__like" type="button"></button>
-          </div>
-        </li>
+
       </ul>
     </section>
   </main>
   <footer class="footer page__container">
     <p class="footer__copyright">© 2021 Mesto Russia</p>
   </footer>
-  <div class="popup">
+  <div class="popup popup_type_profile">
     <div class="popup__container">
       <h2 class="popup__title">Редактировать профиль</h2>
       <form class="popup__form" name="bio">
-        <input class="popup__input" type="text" id="name" name="name" placeholder="Жак-Ив Кусто" required>
+        <input class="popup__input" type="text" id="nickname" name="nickname" placeholder="Жак-Ив Кусто" required>
         <input class="popup__input" type="text" id="description" name="description" placeholder="Исследователь океана" required>
         <button class="popup__button" name="bio" type="submit">Сохранить</button>
       </form>
       <button class="popup__close" type="button"></button>
     </div>
   </div>
+  <div class="popup popup_type_add-card">
+    <div class="popup__container">
+      <h2 class="popup__title">Новое место</h2>
+      <form class="popup__form" name="bio">
+        <input class="popup__input" type="text" id="title" name="title" placeholder="Название" required>
+        <input class="popup__input" type="text" id="link" name="link" placeholder="Ссылка на картинку" required>
+        <button class="popup__button" name="bio" type="submit">Создать</button>
+      </form>
+      <button class="popup__close" type="button"></button>
+    </div>
+  </div>
+  <div class="popup popup_type_open-image"></div>
+  <template class="card-template">
+    <li class="card">
+      <img class="card__image" src="./images/dombai.jpg">
+      <a class="card__delete" href="#"></a>
+      <div class="card__panel">
+        <h2 class="card__title">Домбай</h2>
+        <button class="card__like" type="button"></button>
+      </div>
+    </li>
+  </template>
   <script src="js/script.js"></script>
 </body>
 </html>
