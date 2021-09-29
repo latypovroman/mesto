@@ -6,7 +6,9 @@ const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupImage = document.querySelector('.popup_type_open-image');
 
-const popupClose = document.querySelectorAll('.popup__close');
+const closeProfileButton = popupProfile.querySelector('.popup__close');
+const closeAddButton = popupAddCard.querySelector('.popup__close');
+const closeImageButton = popupImage.querySelector('.popup__close');
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
@@ -69,8 +71,8 @@ function openPopup(type) {
 
 
 
-function closePopup() {
-  popup.classList.remove('popup_opened');
+function closePopup(type) {
+  type.classList.remove('popup_opened');
   page.classList.remove('page_scroll_disable');
 }
 
@@ -80,7 +82,7 @@ function changeProfile(evt) {
   evt.preventDefault();
   profileName.textContent = nickname.value;
   profileDescription.textContent = description.value;
-  closePopup();
+  closePopup(popupProfile);
 }
 formProfile.addEventListener('submit', changeProfile);
 // Изменение профиля при нажатии сохранить end
@@ -88,7 +90,7 @@ formProfile.addEventListener('submit', changeProfile);
 // Закрытие любого попапа по клику вне контейнера start
 function closePopupForce(event) {
   if (event.target === event.currentTarget) {
-    closePopup()
+    closePopup();
   }
 }
 // Закрытие любого попапа по клику вне контейнера end
@@ -102,6 +104,7 @@ function createCard(evt) {
   evt.target.classList.toggle('card__like_active');
   });
   cardList.prepend(newCard);
+  closePopup(popupAddCard);
 }
 formAddCard.addEventListener('submit', createCard);
 
@@ -117,6 +120,17 @@ editButton.addEventListener('click',
     openPopup(popupProfile)
   });
 
-popup.addEventListener('click', closePopupForce);
+// Закрываем попап по клику на крестик (profile)
+closeProfileButton.addEventListener('click',
+()=>{
+    closePopup(popupProfile)
+  });
 
-popupClose.addEventListener('click', closePopup); // Закрываем любой попап
+// Закрываем попап по клику на крестик (addCard)
+closeAddButton.addEventListener('click',
+()=>{
+    closePopup(popupAddCard)
+  });
+
+
+popup.addEventListener('click', closePopupForce);
