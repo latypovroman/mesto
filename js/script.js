@@ -53,9 +53,6 @@ const initialCards = [
   }
 ];
 
-// Этот говнокод - результат недельной работы, у меня не получается его исправить, все ломается(
-// я в ступоре, в первую очередь не понимаю как функции создания карточек оптимизировать, чтобы не повторять его дважды
-
 function initialCardsRender(initialCards) { // Рендер начальных карт
   const newCard = cardTemplate.content.cloneNode(true);
   newCard.querySelector('.card__image').src = initialCards.link;
