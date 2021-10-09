@@ -78,9 +78,6 @@ const newCard = cardTemplate.content.cloneNode(true);
     popupImageTitle.textContent = desc;
     popupImagePicture.alt = desc;
   })
-  // closeImageButton.addEventListener('click', function() {
-  //   closePopup(popupImage);
-  // })
   return newCard;
 }
 
@@ -107,7 +104,10 @@ function changeProfile(evt) {
   profileName.textContent = nickname.value;
   profileDescription.textContent = description.value;
   closePopup(popupProfile);
+  nickname.value = '';
+  description.value = '';
 }
+
 formProfile.addEventListener('submit', changeProfile);
 // Изменение профиля при нажатии сохранить end
 
