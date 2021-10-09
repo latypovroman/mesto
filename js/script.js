@@ -1,6 +1,5 @@
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const popup = document.querySelector('.popup');
 
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
@@ -10,7 +9,7 @@ const popupImageTitle = popupImage.querySelector('.popup__image-title');
 
 const closeProfileButton = popupProfile.querySelector('.popup__close');
 const closeAddButton = popupAddCard.querySelector('.popup__close');
-const closeImageButton = popupImage.querySelector('.popup__close-image');
+const closeImageButton = popupImage.querySelector('.popup__close');
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
@@ -53,25 +52,39 @@ const initialCards = [
   }
 ];
 
-function initialCardsRender(initialCards) { // Рендер начальных карт
-  const newCard = cardTemplate.content.cloneNode(true);
-  newCard.querySelector('.card__image').src = initialCards.link;
-  newCard.querySelector('.card__title').textContent = initialCards.name;
+function initialCardsRender(initialCards) {
+  cardList.prepend(createCard(initialCards.link, initialCards.name));
+}
+initialCards.map(initialCardsRender);
+
+function addCard(evt) {
+  evt.preventDefault();
+  cardList.prepend(createCard(link.value, title.value));
+  closePopup(popupAddCard);
+}
+
+function createCard(url, desc) {
+const newCard = cardTemplate.content.cloneNode(true);
+  newCard.querySelector('.card__image').src = url;
+  newCard.querySelector('.card__title').textContent = desc;
+  newCard.querySelector('.card__image').alt = desc;
   newCard.querySelector('.card__delete').addEventListener('click', handlerCardDelete);
   newCard.querySelector('.card__like').addEventListener('click', function(evt) {
     evt.target.classList.toggle('card__like_active');
     });
   newCard.querySelector('.card__image').addEventListener('click', function() {
     openPopup(popupImage);
-    popupImagePicture.src = initialCards.link;
-    popupImageTitle.textContent = initialCards.name;
+    popupImagePicture.src = url;
+    popupImageTitle.textContent = desc;
+    popupImagePicture.alt = desc;
   })
-  closeImageButton.addEventListener('click', function() {
-    closePopup(popupImage);
-  })
-  cardList.prepend(newCard);
+  // closeImageButton.addEventListener('click', function() {
+  //   closePopup(popupImage);
+  // })
+  return newCard;
 }
-initialCards.map(initialCardsRender);
+
+
 
 function openPopup(type) {
   type.classList.add('popup_opened');
@@ -101,31 +114,10 @@ formProfile.addEventListener('submit', changeProfile);
 // Закрытие любого попапа по клику вне контейнера start
 function closePopupForce(event) {
   if (event.target === event.currentTarget) {
-    closePopup();
+    closePopup(event.target);
   }
 }
 // Закрытие любого попапа по клику вне контейнера end
-
-function createCard(evt) {
-  evt.preventDefault();
-  const newCard = cardTemplate.content.cloneNode(true);
-  newCard.querySelector('.card__image').src = link.value;
-  newCard.querySelector('.card__title').textContent = title.value;
-  newCard.querySelector('.card__delete').addEventListener('click', handlerCardDelete);
-  newCard.querySelector('.card__like').addEventListener('click', function(evt) {
-  evt.target.classList.toggle('card__like_active');
-  });
-  newCard.querySelector('.card__image').addEventListener('click', function() {
-    openPopup(popupImage);
-    popupImagePicture.src = link.value;
-    popupImageTitle.textContent = title.value;
-  })
-  closeImageButton.addEventListener('click', function() {
-    closePopup(popupImage);
-  })
-  cardList.prepend(newCard);
-  closePopup(popupAddCard);
-}
 
 // Вызываем попап карточек по клику на add
 addButton.addEventListener('click',
@@ -151,8 +143,12 @@ closeAddButton.addEventListener('click',
     closePopup(popupAddCard)
   });
 
+closeImageButton.addEventListener('click', function() {
+    closePopup(popupImage);
+  })
 
-formAddCard.addEventListener('submit', createCard);
-popup.addEventListener('click', closePopupForce);
 
-
+formAddCard.addEventListener('submit', addCard);
+popupProfile.addEventListener('click', closePopupForce);
+popupAddCard.addEventListener('click', closePopupForce);
+popupImage.addEventListener('click', closePopupForce);
