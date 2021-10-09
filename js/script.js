@@ -61,6 +61,8 @@ function addCard(evt) {
   evt.preventDefault();
   cardList.prepend(createCard(link.value, title.value));
   closePopup(popupAddCard);
+  link.value = '';
+  title.value = '';
 }
 
 function createCard(url, desc) {
@@ -104,8 +106,6 @@ function changeProfile(evt) {
   profileName.textContent = nickname.value;
   profileDescription.textContent = description.value;
   closePopup(popupProfile);
-  nickname.value = '';
-  description.value = '';
 }
 
 formProfile.addEventListener('submit', changeProfile);
@@ -123,12 +123,15 @@ function closePopupForce(event) {
 addButton.addEventListener('click',
 ()=>{
     openPopup(popupAddCard)
+
   });
 
 // Вызываем попап профиля по клику на edit
 editButton.addEventListener('click',
 ()=>{
     openPopup(popupProfile)
+    nickname.value = profileName.textContent;
+    description.value = profileDescription.textContent;
   });
 
 // Закрываем попап по клику на крестик (profile)
