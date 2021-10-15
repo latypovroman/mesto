@@ -52,12 +52,13 @@ const initialCards = [
   }
 ];
 
-function initialCardsRender(initialCards) {
+function initialCardsRender(initialCards) { //Создает карточки из объекта initialCards
   cardList.prepend(createCard(initialCards.link, initialCards.name));
 }
-initialCards.map(initialCardsRender);
 
-function addCard(evt) {
+initialCards.map(initialCardsRender); //Вызов созданых карточек
+
+function addCard(evt) { //Создает одну карточку с учетом введеных в форму данных
   evt.preventDefault();
   cardList.prepend(createCard(link.value, title.value));
   closePopup(popupAddCard);
@@ -65,7 +66,7 @@ function addCard(evt) {
   title.value = '';
 }
 
-function createCard(url, desc) {
+function createCard(url, desc) { //Функция образования карточки из template, возвращает код карточки с необходимыми аргументами
 const newCard = cardTemplate.content.cloneNode(true);
   newCard.querySelector('.card__image').src = url;
   newCard.querySelector('.card__title').textContent = desc;
@@ -83,8 +84,6 @@ const newCard = cardTemplate.content.cloneNode(true);
   return newCard;
 }
 
-
-
 function openPopup(type) {
   type.classList.add('popup_opened');
   page.classList.add('page_scroll_disable');
@@ -100,8 +99,8 @@ function handlerCardDelete(evt) { // Функция удаления карто�
   elementDelete.remove();
 }
 
-// Изменение профиля при нажатии сохранить start
-function changeProfile(evt) {
+
+function changeProfile(evt) { // Получение данных из формы для изменения профиля
   evt.preventDefault();
   profileName.textContent = nickname.value;
   profileDescription.textContent = description.value;
@@ -109,39 +108,32 @@ function changeProfile(evt) {
 }
 
 formProfile.addEventListener('submit', changeProfile);
-// Изменение профиля при нажатии сохранить end
 
-// Закрытие любого попапа по клику вне контейнера start
-function closePopupForce(event) {
+function closePopupForce(event) { // Закрытие любого попапа по клику вне контейнера
   if (event.target === event.currentTarget) {
     closePopup(event.target);
   }
 }
-// Закрытие любого попапа по клику вне контейнера end
 
-// Вызываем попап карточек по клику на add
-addButton.addEventListener('click',
+addButton.addEventListener('click', // Вызываем попап карточек по клику на add
 ()=>{
-    openPopup(popupAddCard)
-
+    openPopup(popupAddCard);
+    toggleButtonState(false, popupAddCard.querySelector('.popup__button'), validateObject);
   });
 
-// Вызываем попап профиля по клику на edit
-editButton.addEventListener('click',
+editButton.addEventListener('click', // Вызываем попап профиля по клику на edit
 ()=>{
-    openPopup(popupProfile)
+    openPopup(popupProfile);
     nickname.value = profileName.textContent;
     description.value = profileDescription.textContent;
   });
 
-// Закрываем попап по клику на крестик (profile)
-closeProfileButton.addEventListener('click',
+closeProfileButton.addEventListener('click', // Закрываем попап по клику на крестик (profile)
 ()=>{
     closePopup(popupProfile)
   });
 
-// Закрываем попап по клику на крестик (addCard)
-closeAddButton.addEventListener('click',
+closeAddButton.addEventListener('click', // Закрываем попап по клику на крестик (addCard)
 ()=>{
     closePopup(popupAddCard)
   });
@@ -150,8 +142,17 @@ closeImageButton.addEventListener('click', function() {
     closePopup(popupImage);
   })
 
-
 formAddCard.addEventListener('submit', addCard);
+
 popupProfile.addEventListener('click', closePopupForce);
 popupAddCard.addEventListener('click', closePopupForce);
 popupImage.addEventListener('click', closePopupForce);
+
+document.addEventListener('keydown',
+(event)=>{
+  if (event.key === 'Escape') {
+  closePopup(popupImage);
+  closePopup(popupAddCard);
+  closePopup(popupProfile);
+  }
+});
