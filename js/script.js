@@ -68,9 +68,10 @@ function addCard(evt) { //Создает одну карточку с учето
 
 function createCard(url, desc) { //Функция образования карточки из template, возвращает код карточки с необходимыми аргументами
 const newCard = cardTemplate.content.cloneNode(true);
-  newCard.querySelector('.card__image').src = url;
+const cardImage = newCard.querySelector('.card__image');
+  cardImage.src = url;
+  cardImage.alt = desc;
   newCard.querySelector('.card__title').textContent = desc;
-  newCard.querySelector('.card__image').alt = desc;
   newCard.querySelector('.card__delete').addEventListener('click', handlerCardDelete);
   newCard.querySelector('.card__like').addEventListener('click', function(evt) {
     evt.target.classList.toggle('card__like_active');
@@ -87,11 +88,13 @@ const newCard = cardTemplate.content.cloneNode(true);
 function openPopup(type) {
   type.classList.add('popup_opened');
   page.classList.add('page_scroll_disable');
+  document.addEventListener('keydown', closePopupEscape);
 }
 
 function closePopup(type) {
   type.classList.remove('popup_opened');
   page.classList.remove('page_scroll_disable');
+  document.removeEventListener('keydown', closePopupEscape);
 }
 
 function handlerCardDelete(evt) { // Функция удаления карточки по клику на корзину
@@ -112,6 +115,13 @@ formProfile.addEventListener('submit', changeProfile);
 function closePopupForce(event) { // Закрытие любого попапа по клику вне контейнера
   if (event.target === event.currentTarget) {
     closePopup(event.target);
+  }
+}
+
+function closePopupEscape(event) {
+  if (event.key === 'Escape') {
+    const openedPopup = document.querySelector('.popup_opened');
+    closePopup(openedPopup);
   }
 }
 
@@ -148,11 +158,3 @@ popupProfile.addEventListener('click', closePopupForce);
 popupAddCard.addEventListener('click', closePopupForce);
 popupImage.addEventListener('click', closePopupForce);
 
-document.addEventListener('keydown',
-(event)=>{
-  if (event.key === 'Escape') {
-  closePopup(popupImage);
-  closePopup(popupAddCard);
-  closePopup(popupProfile);
-  }
-});
