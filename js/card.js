@@ -1,22 +1,23 @@
 export default class Card {
-  constructor(data, cardSelector) {
+  constructor(data, cardSelector, openPopup) {
     this._cardSelector = cardSelector;
-    this._data = data;
+    this._link = data.link;
+    this._name = data.name;
+    this._openPopup = openPopup;
   }
 
   _getTemplate() {
-    const cardTemplate = document.querySelector('.card-template').content.querySelector('.card').cloneNode(true);
-    return cardTemplate;
+    return document.querySelector(this._cardSelector).content.querySelector('.card').cloneNode(true);
   }
-
 
   generateCard() {
     this._template = this._getTemplate();
     const cardImage = this._template.querySelector('.card__image');
+    const cardText = this._template.querySelector('.card__title');
 
-    cardImage.src = this._data.link;
-    cardImage.alt = this._data.name;
-    this._template.querySelector('.card__title').textContent = this._data.name;
+    cardImage.src = this._link;
+    cardImage.alt = this._name;
+    cardText.textContent = this._name;
 
     this._setEventListeners();
 
@@ -30,9 +31,9 @@ export default class Card {
     this._template.querySelector('.card__like').addEventListener('click', () => {
       this._likeToggle();
     });
-    // this._template.querySelector('.card__image').addEventListener('click', () => {
-    //   popupImageOpen();
-    // });
+    this._template.querySelector('.card__image').addEventListener('click', () => {
+      this._popupImageOpen();
+    });
   }
 
   _handlerCardDelete() {
@@ -40,13 +41,14 @@ export default class Card {
   }
 
   _popupImageOpen() {
-    openPopup(popupImage);
+    const popupImage = document.querySelector('.popup_type_open-image');
     const popupImagePicture = popupImage.querySelector('.popup__popup-image');
     const popupImageTitle = popupImage.querySelector('.popup__image-title');
+    this._openPopup(popupImage);
 
-    popupImagePicture.src = this._data.link;
-    popupImageTitle.textContent = this._data.name;
-    popupImagePicture.alt = this._data.name;
+    popupImagePicture.src = this._link;
+    popupImageTitle.textContent = this._name;
+    popupImagePicture.alt = this._name;
   }
 
   _likeToggle() {

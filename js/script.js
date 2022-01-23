@@ -30,6 +30,8 @@ const link = document.querySelector('#link');
 
 const cardList = document.querySelector('.cards__list');
 
+
+
 const initialCards = [
   {
     name: 'Архыз',
@@ -67,8 +69,12 @@ const validateObject = {
 };
 
 initialCards.forEach(function (item) {
-  const card = new Card(item, ".card-template");
+  const card = new Card(item, ".card-template", (popupImage) => openPopup(popupImage));
   cardList.append(card.generateCard());
+});
+
+initialValidationForms.forEach( function(item) {
+  item.enableValidation();
 });
 
 function addCard(evt) {
@@ -110,19 +116,8 @@ function addCard(evt) {
 //   return newCard;
 // }
 
-function openPopup(type) {
-  type.classList.add('popup_opened');
-  page.classList.add('page_scroll_disable');
-  document.addEventListener('keydown', () => {
-    closePopupEscape();
-  });
-}
 
-function closePopup(type) {
-  type.classList.remove('popup_opened');
-  page.classList.remove('page_scroll_disable');
-  document.removeEventListener('keydown', closePopupEscape);
-}
+
 
 // function handlerCardDelete(evt) { // Функция удаления карточки по клику на корзину
 //   const elementDelete = evt.target.closest('.card');
@@ -139,6 +134,12 @@ function changeProfile(evt) { // Получение данных из формы
 
 formProfile.addEventListener('submit', changeProfile);
 
+function openPopup(type) {
+  type.classList.add('popup_opened');
+  page.classList.add('page_scroll_disable');
+  document.addEventListener('keydown', closePopupEscape);
+}
+
 function closePopupForce(event) { // Закрытие любого попапа по клику вне контейнера
   if (event.target === event.currentTarget) {
     closePopup(event.target);
@@ -152,10 +153,17 @@ function closePopupEscape(event) {
   }
 }
 
+
+function closePopup(type) {
+  type.classList.remove('popup_opened');
+  page.classList.remove('page_scroll_disable');
+  document.removeEventListener('keydown', closePopupEscape);
+}
+
 addButton.addEventListener('click', // Вызываем попап карточек по клику на add
 ()=>{
     openPopup(popupAddCard);
-    toggleButtonState(false, popupAddCard.querySelector('.popup__button'), validateObject);
+    Form.Validator.toggleButtonState(false, popupAddCard.querySelector('.popup__button'), validateObject);
   });
 
 editButton.addEventListener('click', // Вызываем попап профиля по клику на edit
@@ -185,7 +193,13 @@ popupProfile.addEventListener('click', closePopupForce);
 popupAddCard.addEventListener('click', closePopupForce);
 popupImage.addEventListener('click', closePopupForce);
 
-FormValidator.enableValidation(validateObject);
+const profileValidation =  new FormValidator(validateObject, formProfile);
+const addCardValidation = new FormValidator(validateObject, formAddCard);
+
+
+const initialValidationForms = [profileValidation, addCardValidation];
+
+
 
 
 
