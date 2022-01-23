@@ -1,3 +1,8 @@
+import Card from "./card.js"
+import FormValidator from "./validation.js"
+
+
+
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 
@@ -24,7 +29,7 @@ const link = document.querySelector('#link');
 
 
 const cardList = document.querySelector('.cards__list');
-const cardTemplate = document.querySelector('.card-template');
+
 const initialCards = [
   {
     name: 'Архыз',
@@ -52,43 +57,65 @@ const initialCards = [
   }
 ];
 
-function initialCardsRender(initialCards) { //Создает карточки из объекта initialCards
-  cardList.prepend(createCard(initialCards.link, initialCards.name));
-}
+const validateObject = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button',
+  inactiveButtonClass: 'popup__button_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__error_active'
+};
 
-initialCards.map(initialCardsRender); //Вызов созданых карточек
+initialCards.forEach(function (item) {
+  const card = new Card(item, ".card-template");
+  cardList.append(card.generateCard());
+});
 
-function addCard(evt) { //Создает одну карточку с учетом введеных в форму данных
+function addCard(evt) {
   evt.preventDefault();
-  cardList.prepend(createCard(link.value, title.value));
+  const data = {};
+  data.name = title.value;
+  data.link = link.value;
+  const card = new Card(data, ".card-template");
+  cardList.prepend(card.generateCard());
   closePopup(popupAddCard);
   link.value = '';
   title.value = '';
 }
 
-function createCard(url, desc) { //Функция образования карточки из template, возвращает код карточки с необходимыми аргументами
-const newCard = cardTemplate.content.cloneNode(true);
-const cardImage = newCard.querySelector('.card__image');
-  cardImage.src = url;
-  cardImage.alt = desc;
-  newCard.querySelector('.card__title').textContent = desc;
-  newCard.querySelector('.card__delete').addEventListener('click', handlerCardDelete);
-  newCard.querySelector('.card__like').addEventListener('click', function(evt) {
-    evt.target.classList.toggle('card__like_active');
-    });
-  newCard.querySelector('.card__image').addEventListener('click', function() {
-    openPopup(popupImage);
-    popupImagePicture.src = url;
-    popupImageTitle.textContent = desc;
-    popupImagePicture.alt = desc;
-  })
-  return newCard;
-}
+// function popupImageOpen() {
+//   openPopup(popupImage);
+//   popupImagePicture.src = card._data.link;
+//   popupImageTitle.textContent = card._data.name;
+//   popupImagePicture.alt = card._data.name;
+// }
+
+
+// function createCard(url, desc) { //Функция образования карточки из template, возвращает код карточки с необходимыми аргументами
+// const newCard = cardTemplate.content.cloneNode(true);
+// const cardImage = newCard.querySelector('.card__image');
+//   cardImage.src = url;
+//   cardImage.alt = desc;
+//   newCard.querySelector('.card__title').textContent = desc;
+//   newCard.querySelector('.card__delete').addEventListener('click', handlerCardDelete);
+//   newCard.querySelector('.card__like').addEventListener('click', function(evt) {
+//     evt.target.classList.toggle('card__like_active');
+//     });
+//   newCard.querySelector('.card__image').addEventListener('click', function() {
+//     openPopup(popupImage);
+//     popupImagePicture.src = url;
+//     popupImageTitle.textContent = desc;
+//     popupImagePicture.alt = desc;
+//   })
+//   return newCard;
+// }
 
 function openPopup(type) {
   type.classList.add('popup_opened');
   page.classList.add('page_scroll_disable');
-  document.addEventListener('keydown', closePopupEscape);
+  document.addEventListener('keydown', () => {
+    closePopupEscape();
+  });
 }
 
 function closePopup(type) {
@@ -97,10 +124,10 @@ function closePopup(type) {
   document.removeEventListener('keydown', closePopupEscape);
 }
 
-function handlerCardDelete(evt) { // Функция удаления карточки по клику на корзину
-  const elementDelete = evt.target.closest('.card');
-  elementDelete.remove();
-}
+// function handlerCardDelete(evt) { // Функция удаления карточки по клику на корзину
+//   const elementDelete = evt.target.closest('.card');
+//   elementDelete.remove();
+// }
 
 
 function changeProfile(evt) { // Получение данных из формы для изменения профиля
@@ -157,4 +184,8 @@ formAddCard.addEventListener('submit', addCard);
 popupProfile.addEventListener('click', closePopupForce);
 popupAddCard.addEventListener('click', closePopupForce);
 popupImage.addEventListener('click', closePopupForce);
+
+FormValidator.enableValidation(validateObject);
+
+
 
