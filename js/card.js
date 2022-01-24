@@ -4,6 +4,7 @@ export default class Card {
     this._link = data.link;
     this._name = data.name;
     this._openPopup = openPopup;
+
   }
 
   _getTemplate() {
@@ -12,12 +13,14 @@ export default class Card {
 
   generateCard() {
     this._template = this._getTemplate();
-    const cardImage = this._template.querySelector('.card__image');
-    const cardText = this._template.querySelector('.card__title');
+    this._cardImage = this._template.querySelector('.card__image');
+    this._cardText = this._template.querySelector('.card__title');
+    this._cardDelete = this._template.querySelector('.card__delete');
+    this._cardLike = this._template.querySelector('.card__like');
 
-    cardImage.src = this._link;
-    cardImage.alt = this._name;
-    cardText.textContent = this._name;
+    this._cardImage.src = this._link;
+    this._cardImage.alt = this._name;
+    this._cardText.textContent = this._name;
 
     this._setEventListeners();
 
@@ -25,22 +28,22 @@ export default class Card {
   }
 
   _setEventListeners() {
-    this._template.querySelector('.card__delete').addEventListener('click', () => {
+    this._cardDelete.addEventListener('click', () => {
       this._handlerCardDelete();
     });
-    this._template.querySelector('.card__like').addEventListener('click', () => {
+    this._cardLike.addEventListener('click', () => {
       this._likeToggle();
     });
-    this._template.querySelector('.card__image').addEventListener('click', () => {
-      this._popupImageOpen();
+    this._cardImage.addEventListener('click', () => {
+      this._openImagePopup();
     });
   }
 
   _handlerCardDelete() {
-    this._template.querySelector('.card__like').closest('.card').remove();
+    this._cardDelete.closest('.card').remove();
   }
 
-  _popupImageOpen() {
+  _openImagePopup() {
     const popupImage = document.querySelector('.popup_type_open-image');
     const popupImagePicture = popupImage.querySelector('.popup__popup-image');
     const popupImageTitle = popupImage.querySelector('.popup__image-title');
@@ -52,7 +55,7 @@ export default class Card {
   }
 
   _likeToggle() {
-    this._template.querySelector('.card__like').classList.toggle('card__like_active');
+    this._cardLike.classList.toggle('card__like_active');
   }
 
 }
