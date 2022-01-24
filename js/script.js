@@ -9,10 +9,6 @@ const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupImage = document.querySelector('.popup_type_open-image');
 const popups = document.querySelectorAll('.popup');
 
-const closeProfileButton = popupProfile.querySelector('.popup__close');
-const closeAddButton = popupAddCard.querySelector('.popup__close');
-const closeImageButton = popupImage.querySelector('.popup__close');
-
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
 
@@ -148,10 +144,3 @@ editButton.addEventListener('click',
   });
 
 formAddCard.addEventListener('submit', addCard);
-
-
-
-
-
-
-
