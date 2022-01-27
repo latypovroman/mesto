@@ -97,7 +97,7 @@ function createCard(data) {
 const popupWithCard = new PopupWithForm({
   popupSelector: popupAddCard,
   submitAction: (data) => {
-    addCardList.setItem(createCard(data))
+    initialCardList.setItem(createCard(data))
 
     popupWithCard.setEventListeners();
   }
