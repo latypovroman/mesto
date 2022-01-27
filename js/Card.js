@@ -1,9 +1,9 @@
 export default class Card {
-  constructor(data, cardSelector, openPopup) {
+  constructor(data, cardSelector, handleCardClick) {
     this._cardSelector = cardSelector;
     this._link = data.link;
     this._name = data.name;
-    this._openPopup = openPopup;
+    this._handleCardClick = handleCardClick;
 
   }
 
@@ -35,23 +35,12 @@ export default class Card {
       this._likeToggle();
     });
     this._cardImage.addEventListener('click', () => {
-      this._openImagePopup();
+      this._handleCardClick(this._name, this._link);
     });
   }
 
   _handlerCardDelete() {
     this._cardDelete.closest('.card').remove();
-  }
-
-  _openImagePopup() {
-    const popupImage = document.querySelector('.popup_type_open-image');
-    const popupImagePicture = popupImage.querySelector('.popup__popup-image');
-    const popupImageTitle = popupImage.querySelector('.popup__image-title');
-    this._openPopup(popupImage);
-
-    popupImagePicture.src = this._link;
-    popupImageTitle.textContent = this._name;
-    popupImagePicture.alt = this._name;
   }
 
   _likeToggle() {
