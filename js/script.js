@@ -11,20 +11,20 @@ const addButton = document.querySelector('.profile__add-button');
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupImage = document.querySelector('.popup_type_open-image');
-const popups = document.querySelectorAll('.popup');
+// const popups = document.querySelectorAll('.popup');
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
 
-const page = document.querySelector('.page');
+// const page = document.querySelector('.page');
 const name = document.querySelector('#nickname');
 const description = document.querySelector('#description');
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
-const title = document.querySelector('#title');
-const link = document.querySelector('#link');
+// const title = document.querySelector('#title');
+// const link = document.querySelector('#link');
 
-const cardList = document.querySelector('.cards__list');
+// const cardList = document.querySelector('.cards__list');
 
 const validateObject = {
   formSelector: '.popup__form',
@@ -98,31 +98,35 @@ const popupWithCard = new PopupWithForm({
   popupSelector: popupAddCard,
   submitAction: (data) => {
     initialCardList.setItem(createCard(data))
-
-    popupWithCard.setEventListeners();
+    // popupWithCard.setEventListeners();
   }
 })
+
+const userInfo = new UserInfo({
+  nameSelector: profileName,
+  infoSelector: profileDescription});
 
 const popupWithProfile = new PopupWithForm({
   popupSelector: popupProfile,
   submitAction: (data) => {
-    const userInfo = new UserInfo({
-      nameSelector: profileName,
-      infoSelector: profileDescription});
     userInfo.setUserInfo(data);
   }
 })
 
+function fillInputs() {
+  const fill = userInfo.getUserInfo();
+  name.value = fill.name;
+  description.value = fill.info;
+}
+
 addButton.addEventListener('click', () => {
   popupWithCard.open();
-  // popupWithCard.setEventListeners();
   addCardValidation.resetValidation();
-
   });
 
 editButton.addEventListener('click', () => {
     popupWithProfile.open();
-    // popupWithProfile.setEventListeners();
+    fillInputs();
     profileValidation.resetValidation();
   });
 
