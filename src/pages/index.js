@@ -92,8 +92,6 @@ const popupWithCard = new PopupWithForm({
   popupSelector: popupAddCard,
   submitAction: (data) => {
     initialCardList.setItem(createCard(data))
-
-    popupWithCard.setEventListeners();
   }
 })
 
@@ -117,7 +115,6 @@ function getProfileInfo() {
 addButton.addEventListener('click', () => {
   popupWithCard.open();
   addCardValidation.resetValidation();
-
   });
 
 editButton.addEventListener('click', () => {
