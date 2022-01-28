@@ -1,9 +1,9 @@
-import Card from "./Card.js"
-import FormValidator from "./FormValidator.js"
-import PopupWithImage from "./PopupWithImage.js";
-import PopupWithForm from "./PopupWithForm.js";
-import Section from "./Section.js"
-import UserInfo from "./UserInfo.js";
+import Card from "../components/Card.js"
+import FormValidator from "../components/FormValidator.js"
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+import Section from "../components/Section.js"
+import UserInfo from "../components/UserInfo.js";
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
@@ -11,20 +11,14 @@ const addButton = document.querySelector('.profile__add-button');
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupImage = document.querySelector('.popup_type_open-image');
-const popups = document.querySelectorAll('.popup');
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
 
-const page = document.querySelector('.page');
 const name = document.querySelector('#nickname');
 const description = document.querySelector('#description');
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
-const title = document.querySelector('#title');
-const link = document.querySelector('#link');
-
-const cardList = document.querySelector('.cards__list');
 
 const validateObject = {
   formSelector: '.popup__form',
@@ -131,7 +125,3 @@ editButton.addEventListener('click', () => {
     getProfileInfo();
     profileValidation.resetValidation();
   });
-
-
-
-
