@@ -103,26 +103,32 @@ const popupWithCard = new PopupWithForm({
   }
 })
 
+const userInfo = new UserInfo({
+  nameSelector: profileName,
+  infoSelector: profileDescription});
+
 const popupWithProfile = new PopupWithForm({
   popupSelector: popupProfile,
   submitAction: (data) => {
-    const userInfo = new UserInfo({
-      nameSelector: profileName,
-      infoSelector: profileDescription});
     userInfo.setUserInfo(data);
   }
 })
 
+function getProfileInfo() {
+  const information = userInfo.getUserInfo();
+  name.value = information.name;
+  description.value = information.info;
+}
+
 addButton.addEventListener('click', () => {
   popupWithCard.open();
-  // popupWithCard.setEventListeners();
   addCardValidation.resetValidation();
 
   });
 
 editButton.addEventListener('click', () => {
     popupWithProfile.open();
-    // popupWithProfile.setEventListeners();
+    getProfileInfo();
     profileValidation.resetValidation();
   });
 
