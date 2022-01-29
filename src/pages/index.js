@@ -5,6 +5,8 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import Section from "../components/Section.js"
 import UserInfo from "../components/UserInfo.js";
 
+import './index.css';
+
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
 

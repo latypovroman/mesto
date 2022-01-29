@@ -6,17 +6,16 @@
   <meta name="description" content="Портфолио Романа Латыпова, дающее толику надежды в безуспешном поиске трудоустройства">
   <meta name="keywords" content="HTML, CSS, Адаптивная верстка, основы JavaScript">
   <meta name="author" content="Роман Латыпов">
-  <link rel="stylesheet" href="./pages/index.css">
   <title>Mesto Russia</title>
 </head>
 <body class="page">
   <header class="header">
-    <img class="header__logo" src="./images/logo.svg" alt="Логотип Mesto">
+    <img class="header__logo" src="<%=require('./images/logo.svg')%>" alt="Логотип Mesto">
   </header>
   <main class="main page__container">
     <section class="profile">
       <div class="profile__content">
-        <img class="profile__image" src="./images/avatar.jpg" alt="Аватар пользователя">
+        <img class="profile__image" src="<%=require('./images/avatar.jpg')%>" alt="Аватар пользователя">
         <div class="profile__text">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button class="profile__edit-button" type="button"></button>
@@ -103,6 +102,5 @@
       </div>
     </li>
   </template>
-  <script type="module" src="pages/index.js"></script>
 </body>
 </html>
