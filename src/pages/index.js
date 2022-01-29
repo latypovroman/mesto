@@ -12,7 +12,6 @@ const addButton = document.querySelector('.profile__add-button');
 
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
-const popupImage = document.querySelector('.popup_type_open-image');
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
@@ -80,8 +79,9 @@ initialValidationForms.forEach( function(item) {
 
 
 function handleCardClick(name, link) {
-  const popupWithImage = new PopupWithImage(popupImage);
+  const popupWithImage = new PopupWithImage('.popup_type_open-image');
   popupWithImage.open(name, link);
+  popupWithImage.setEventListeners();
 }
 
 function createCard(data) {
@@ -91,7 +91,7 @@ function createCard(data) {
 }
 
 const popupWithCard = new PopupWithForm({
-  popupSelector: popupAddCard,
+  popupSelector: '.popup_type_add-card',
   submitAction: (data) => {
     initialCardList.setItem(createCard(data))
   }
@@ -102,11 +102,14 @@ const userInfo = new UserInfo({
   infoSelector: profileDescription});
 
 const popupWithProfile = new PopupWithForm({
-  popupSelector: popupProfile,
+  popupSelector: '.popup_type_profile',
   submitAction: (data) => {
     userInfo.setUserInfo(data);
   }
 })
+
+popupWithProfile.setEventListeners();
+popupWithCard.setEventListeners();
 
 function getProfileInfo() {
   const information = userInfo.getUserInfo();
