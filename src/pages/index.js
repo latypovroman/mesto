@@ -4,7 +4,7 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
 import Section from "../components/Section.js"
 import UserInfo from "../components/UserInfo.js";
-import {validateObject, initialCards} from "../utils/constants.js";
+import {validateObject} from "../utils/constants.js";
 
 import './index.css';
 
@@ -22,7 +22,46 @@ const description = document.querySelector('#description');
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
 
+// GET INITIALCARDS
+fetch('https://mesto.nomoreparties.co/v1/cohort-34/cards', {
+  headers: {
+    authorization: '6ac52070-ddcb-4a60-a12e-e7350f58493c'
+  }
+})
+  .then(res => res.json())
+  .then((result) => {
+    const initialCardList = new Section({
+      data: result,
+      renderer: (item) => {
+        initialCardList.setItem(createCard(item));
+      }
+    }, '.cards__list');
+    initialCardList.renderItems();
+  })
+  .catch((err) => {
+    console.log(err)
+  });
 
+  fetch('https://nomoreparties.co/v1/cohort-34/users/me', {
+    method: 'PATCH',
+    headers: {
+      authorization: '6ac52070-ddcb-4a60-a12e-e7350f58493c',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      name: 'Marie Skłodowska Curie',
+      about: 'Physicist and Chemist'
+    })
+  })
+    .then(res => res.json())
+    .then((reso) => {
+      const nickname = reso.name;
+      const description = reso.about;
+      userInfo.setUserInfo({nickname, description});
+    })
+    .catch((err) => {
+      console.log(err)
+    });
 
 // настройка валидации
 const profileValidation =  new FormValidator(validateObject, formProfile);
@@ -34,21 +73,11 @@ initialValidationForms.forEach( function(item) {
   item.enableValidation();
 });
 
-// карточки
-const initialCardList = new Section({
-  data: initialCards,
-  renderer: (item) => {
-    initialCardList.setItem(createCard(item));
-  }
-}, '.cards__list');
-
 function createCard(data) {
   const card = new Card(data, ".card-template", handleCardClick);
   const cardElement = card.generateCard();
   return cardElement
 }
-
-initialCardList.renderItems();
 
 function handleCardClick(name, link) {
   popupWithImage.open(name, link);
