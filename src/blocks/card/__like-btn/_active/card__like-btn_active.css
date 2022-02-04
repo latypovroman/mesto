@@ -1,4 +1,4 @@
-.card__like_active {
+.card__like-btn_active {
   background: url(../../../../images/like_active.svg) center no-repeat;
   opacity: 1;
 }
