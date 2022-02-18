@@ -23,7 +23,6 @@ const description = document.querySelector('#description');
 const profileName = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
 const cardList = document.querySelector('.cards__list');
-let user;
 
 // настройка валидации
 const profileValidation =  new FormValidator(validateObject, formProfile);
@@ -36,57 +35,59 @@ initialValidationForms.forEach( function(item) {
 });
 
 const api = new Api({
-  url: 'https://mesto.nomoreparties.co/v1/cohort-34',
+  url: 'https://mesto.nomoreparties.co/v1/cohort36',
   headers: {
-    authorization: '6ac52070-ddcb-4a60-a12e-e7350f58493c',
+    authorization: '9757460d-c1af-41c8-81fe-1f11b87a74d9',
     'Content-Type': 'application/json'},
 });
 
 // GET INITIAL CARDS
 function handleCardClick(name, link) {
-  popupWithImage.open({name, link});
+  popupWithImage.open(name, link);
 }
 
 function createCard(data) {
   const card = new Card (
     data,
     '.card-template',
-    {handleCardClick,
+    {
+      handleCardClick,
       handleDeleteClick: () => {
-      api.deleteCard(data)
-      .then(() => {
-        card.deleteCard()
-      })
-      .catch((err) => {
-        console.log(err)
-      });
-    },
-        // handleLikeClick: () => {
-    //     if (data.likes.length)
-    //     api.deleteLike(data)
-    //       .then((data) => {
-    //         card.handleLikeCard(data)
-    //       })
-    //       .catch((err) => {
-    //         console.log(err)
-    //       });
+        api.deleteCard(data)
+        .catch((err) => {
+          console.log(err)
+        })
+      },
+      handleLikeClick: () => {
+        function updateCount(data) {
+          card._likeCounter.textContent = data.likes.length
+        }
 
-    //     api.putLike(data)
-    //       .then((data) => {
-    //         card.handleLikeCard(data)
-    //       })
-    //       .catch((err) => {
-    //         console.log(err)
-    //       });
-    // }
+        if (card.isLiked()) {
+
+          api.putLike(data)
+          .then((data) => updateCount(data))
+          .catch((err) => {
+            console.log(err)
+          })
+
+        } else {
+
+          api.deleteLike(data)
+          .then((data) => updateCount(data))
+          .catch((err) => {
+            console.log(err)
+          })
+
+        }
+        console.log(card.isLiked())
       }
-  );
+  });
   return card.generateCard()
 }
 
 api.getInitialCards()
 .then((result) => {
-  console.log(result);
   const initialCardList = new Section({
     data: result,
     renderer: (item) => {
@@ -107,15 +108,24 @@ const userInfo = new UserInfo({
 
 api.getUserInfo()
 .then((data) => {
-  console.log(data)
   const nickname = data.name;
   const description = data.about;
   userInfo.setUserInfo({nickname, description});
-  user = data._id;
 })
 .catch((err) => {
   console.log(err)
 });
+
+const userId = api.getUserInfo()
+  .then((data) => {
+    console.log(data)
+    return data._id
+  })
+  .catch((err) => {
+    console.log(err)
+  });
+
+console.log(userId)
 
 
 // PATCH PROFILE INFO

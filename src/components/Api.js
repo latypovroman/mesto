@@ -47,41 +47,42 @@ export default class Api {
       .then(this._isResOk)
   }
 
-  deleteCard({_id}){
-    return fetch(`${this._url}/cards/${_id}`, {
+  deleteCard(data){
+    return fetch(`${this._url}/cards/${data._id}`, {
       method: 'DELETE',
       headers: this._headers
     })
       .then(this._isResOk)
   }
 
-  putLike({_id}) {
-    return fetch(`${this._url}/cards/likes/${_id}`, {
+  putLike(data) {
+
+    return fetch(`${this._url}/cards/${data._id}/likes`, {
       method: 'PUT',
       headers: this._headers
     })
       .then(this._isResOk)
   }
 
-  deleteLike({_id}) {
-    debugger;
-    return fetch(`${this._url}/cards/likes/${_id}`, {
+  deleteLike(data) {
+
+    return fetch(`${this._url}/cards/${data._id}/likes`, {
       method: 'DELETE',
       headers: this._headers
     })
       .then(this._isResOk)
   }
 
-  setUserAvatar({avatar}) {
-    return fetch(`${this._url}/users/me/avatar`, {
-      method: 'PATCH',
-      headers: this._headers,
-      body: JSON.stringify({
-        avatar: avatar
-      })
-    })
-      .then(this._isResOk)
-  }
+  // setUserAvatar({avatar}) {
+  //   return fetch(`${this._url}/users/me/avatar`, {
+  //     method: 'PATCH',
+  //     headers: this._headers,
+  //     body: JSON.stringify({
+  //       avatar: avatar
+  //     })
+  //   })
+  //     .then(this._isResOk)
+  // }
 
 
 
