@@ -12,7 +12,7 @@ import './index.css';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-
+let userId;
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupAskDelete = document.querySelector('.popup_type_delete');
@@ -52,8 +52,9 @@ function handleCardClick(name, link) {
   popupWithImage.open(name, link);
 }
 
-function createCard(data) {
+function createCard(userId = 1, data) {
   const card = new Card (
+    userId,
     data,
     '.card-template',
     {
@@ -93,27 +94,12 @@ function createCard(data) {
           .catch((err) => {
             console.log(err)
           })
-
         }
-        console.log(card.isLiked())
       }
   });
+
   return card.generateCard()
 }
-
-api.getInitialCards()
-.then((result) => {
-  const initialCardList = new Section({
-    data: result,
-    renderer: (item) => {
-      initialCardList.setItem(createCard(item));
-    }
-  }, '.cards__list');
-  initialCardList.renderItems();
-})
-.catch((err) => {
-  console.log(err)
-});
 
 // GET INITIAL PROFILE INFO
 const userInfo = new UserInfo({
@@ -121,31 +107,11 @@ const userInfo = new UserInfo({
   infoSelector: profileDescription
 });
 
-api.getUserInfo()
-.then((data) => {
-  const nickname = data.name;
-  const description = data.about;
-  userInfo.setUserInfo({nickname, description});
-})
-.catch((err) => {
-  console.log(err)
-});
-
-const userId = api.getUserInfo()
-  .then((data) => {
-    console.log(data)
-    return data._id
-  })
-  .catch((err) => {
-    console.log(err)
-  });
-
-console.log(userId)
-
 
 // PATCH PROFILE INFO
 function getProfileInfo() {
   const information = userInfo.getUserInfo();
+  console.log(information);
   name.value = information.name;
   description.value = information.info;
 }
@@ -170,9 +136,10 @@ const popupWithProfile = new PopupWithForm({
 const popupWithCard = new PopupWithForm({
   popupSelector: '.popup_type_add-card',
   submitAction: (data) => {
-    api.postNewCard(data)
-    .then((result) => {
-      cardList.prepend(createCard(result));
+    Promise.all([api.postNewCard(data), api.getUserInfo()])
+    .then((data) => {
+      const userId = data[1]._id;
+      cardList.prepend(createCard(userId, data[0]));
     })
     .catch((err) => {
       console.log(err)
@@ -180,6 +147,23 @@ const popupWithCard = new PopupWithForm({
   }
 })
 
+// GET INITIAL INFO AND CARDS
+Promise.all([api.getInitialCards(), api.getUserInfo()])
+.then((data) => {
+  const userId = data[1]._id;
+  const nickname = data[1].name;
+  const description = data[1].about;
+  userInfo.setUserInfo({nickname, description});
+
+  const initialCardList = new Section({
+    data: data[0],
+    renderer: (item) => {
+      initialCardList.setItem(createCard(userId, item));
+    }
+  }, '.cards__list');
+  initialCardList.renderItems();
+})
+.catch(err => console.log(err))
 
 
 

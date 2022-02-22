@@ -6,6 +6,7 @@
   width: 18px;
   height: 19px;
   transition: ease-in-out 0.3s;
+  display: none;
 }
 
 .card__delete:hover {
