@@ -95,6 +95,7 @@
       <button class="popup__close" type="button"></button>
     </div>
   </div>
+
   <div class="popup popup_type_open-image">
     <div class="popup__image-container">
       <img class="popup__popup-image" src="#" alt="Увеличенное фото">
@@ -102,6 +103,17 @@
       <h2 class="popup__image-title">Title</h2>
     </div>
   </div>
+
+  <div class="popup popup_type_delete">
+    <div class="popup__container">
+      <h2 class="popup__title popup__title_type_delete">Вы уверены?</h2>
+      <form class="popup__form" name="delete" novalidate>
+        <button class="popup__button" name="card" type="submit">Да</button>
+      </form>
+      <button class="popup__close" type="button"></button>
+    </div>
+  </div>
+
   <template class="card-template">
     <li class="card">
       <img class="card__image" src="https://">

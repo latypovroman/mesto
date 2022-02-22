@@ -2,6 +2,7 @@ import Card from "../components/Card.js"
 import FormValidator from "../components/FormValidator.js"
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import Popup from "../components/Popup.js";
 import Section from "../components/Section.js"
 import UserInfo from "../components/UserInfo.js";
 import Api from "../components/Api";
@@ -14,9 +15,14 @@ const addButton = document.querySelector('.profile__add-button');
 
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
+const popupAskDelete = document.querySelector('.popup_type_delete');
+
+const popupWithImage = new PopupWithImage('.popup_type_open-image');
+const popupCardDelete = new Popup('.popup_type_delete')
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
+const formCardDelete = popupAskDelete.querySelector('.popup__form');
 
 const name = document.querySelector('#nickname');
 const description = document.querySelector('#description');
@@ -53,10 +59,19 @@ function createCard(data) {
     {
       handleCardClick,
       handleDeleteClick: () => {
-        api.deleteCard(data)
-        .catch((err) => {
-          console.log(err)
+
+        popupCardDelete.open();
+        popupCardDelete.setEventListeners();
+        formCardDelete.addEventListener('submit', (evt) => {
+          evt.preventDefault();
+          card.deleteCard();
+          api.deleteCard(data)
+          .catch((err) => {
+            console.log(err)
+          })
+          popupCardDelete.close();
         })
+
       },
       handleLikeClick: () => {
         function updateCount(data) {
@@ -169,7 +184,7 @@ const popupWithCard = new PopupWithForm({
 
 
 
-const popupWithImage = new PopupWithImage('.popup_type_open-image');
+
 
 
 

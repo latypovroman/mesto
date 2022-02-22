@@ -8,7 +8,6 @@ export default class Card {
     this._handleCardClick = handleCardClick;
     this._handleDeleteClick = handleDeleteClick;
     this._handleLikeClick = handleLikeClick;
-    // this._user = user;
 
   }
 
@@ -37,7 +36,6 @@ export default class Card {
   _setEventListeners() {
     this._cardDelete.addEventListener('click', () => {
       this._handleDeleteClick();
-      this._deleteCard();
     });
 
     this._cardLike.addEventListener('click', () => {
@@ -50,7 +48,7 @@ export default class Card {
     });
   }
 
-  _deleteCard() {
+  deleteCard() {
     this._cardDelete.closest('.card').remove();
   }
 
