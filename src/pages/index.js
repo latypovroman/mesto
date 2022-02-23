@@ -21,7 +21,7 @@ const popupAskDelete = document.querySelector('.popup_type_delete');
 const popupUserPhoto = document.querySelector('.popup_type_user-photo');
 
 const popupWithImage = new PopupWithImage('.popup_type_open-image');
-const popupCardDelete = new Popup('.popup_type_delete')
+const popupCardDelete = new Popup('.popup_type_delete');
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
@@ -122,7 +122,9 @@ function getProfileInfo() {
 const popupWithProfile = new PopupWithForm({
   popupSelector: '.popup_type_profile',
   submitAction: (data) => {
-    changeProfileInfo(data)
+    // popupWithProfile.renderLoading(true);
+    changeProfileInfo(data);
+
   }
 })
 
@@ -132,13 +134,18 @@ function changeProfileInfo(data) {
           const nickname = result.name;
           const description = result.about;
           userInfo.setUserInfo({nickname, description});
-        });
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+        .finally(popupWithProfile.renderLoading(false))
 }
 
 // POST NEW CARD
 const popupWithCard = new PopupWithForm({
   popupSelector: '.popup_type_add-card',
   submitAction: (data) => {
+    // popupWithCard.renderLoading(true);
     Promise.all([api.postNewCard(data), api.getUserInfo()])
     .then((data) => {
       const userId = data[1]._id;
@@ -146,7 +153,8 @@ const popupWithCard = new PopupWithForm({
     })
     .catch((err) => {
       console.log(err)
-    });
+    })
+    .finally(popupWithCard.renderLoading(false));
   }
 })
 
@@ -173,11 +181,13 @@ Promise.all([api.getInitialCards(), api.getUserInfo()])
 const popupWithUserPhoto = new PopupWithForm({
   popupSelector: '.popup_type_user-photo',
   submitAction: (data) => {
+    // popupWithUserPhoto.renderLoading(true);
     api.patchUserAvatar(data)
     .then((data) => {
       userPhoto.setUserPhoto(data);
     })
     .catch(err => console.log(err))
+    .finally(popupWithUserPhoto.renderLoading(false))
   }
 })
 
