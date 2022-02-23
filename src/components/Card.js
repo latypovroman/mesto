@@ -29,9 +29,7 @@ export default class Card {
     this._cardDelete = this._template.querySelector('.card__delete');
     this._cardLike = this._template.querySelector('.card__like-btn');
     this._likeCounter = this._template.querySelector('.card__like-counter');
-    console.log(this._handleDeleteButton())
-    console.log(this._userId)
-    console.log(this._ownerId)
+
 
 
     this._cardImage.src = this._link;

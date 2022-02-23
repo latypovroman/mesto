@@ -15,7 +15,9 @@
   <main class="main page__container">
     <section class="profile">
       <div class="profile__content">
-        <img class="profile__image" src="<%=require('./images/avatar.jpg')%>" alt="Аватар пользователя">
+        <div class="profile__image-edit-pencil">
+          <img class="profile__image" src="<%=require('./images/avatar.jpg')%>" alt="Аватар пользователя">
+        </div>
         <div class="profile__text">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button class="profile__edit-button" type="button"></button>
@@ -43,6 +45,7 @@
   <footer class="footer page__container">
     <p class="footer__copyright">© 2021 Mesto Russia</p>
   </footer>
+
   <div class="popup popup_type_profile">
     <div class="popup__container">
       <h2 class="popup__title">Редактировать профиль</h2>
@@ -70,6 +73,7 @@
       <button class="popup__close" type="button"></button>
     </div>
   </div>
+
   <div class="popup popup_type_add-card">
     <div class="popup__container">
       <h2 class="popup__title">Новое место</h2>
@@ -91,6 +95,23 @@
                 required>
         <span class="popup__error" id="link-error"></span>
         <button class="popup__button" name="card" type="submit">Создать</button>
+      </form>
+      <button class="popup__close" type="button"></button>
+    </div>
+  </div>
+
+  <div class="popup popup_type_user-photo">
+    <div class="popup__container">
+      <h2 class="popup__title">Обновить аватар</h2>
+      <form class="popup__form" name="user-photo" novalidate>
+        <input  class="popup__input"
+                type="url"
+                id="link"
+                name="link"
+                placeholder="Ссылка на аватар"
+                required>
+        <span class="popup__error" id="link-error"></span>
+        <button class="popup__button" name="user-photo" type="submit">Сохранить</button>
       </form>
       <button class="popup__close" type="button"></button>
     </div>

@@ -65,7 +65,6 @@ export default class Api {
   }
 
   deleteLike(data) {
-
     return fetch(`${this._url}/cards/${data._id}/likes`, {
       method: 'DELETE',
       headers: this._headers
@@ -73,16 +72,16 @@ export default class Api {
       .then(this._isResOk)
   }
 
-  // setUserAvatar({avatar}) {
-  //   return fetch(`${this._url}/users/me/avatar`, {
-  //     method: 'PATCH',
-  //     headers: this._headers,
-  //     body: JSON.stringify({
-  //       avatar: avatar
-  //     })
-  //   })
-  //     .then(this._isResOk)
-  // }
+  patchUserAvatar(data) {
+    return fetch(`${this._url}/users/me/avatar`, {
+      method: 'PATCH',
+      headers: this._headers,
+      body: JSON.stringify({
+        avatar: data.link
+      })
+    })
+      .then(this._isResOk)
+  }
 
 
 

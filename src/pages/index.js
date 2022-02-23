@@ -5,6 +5,7 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import Popup from "../components/Popup.js";
 import Section from "../components/Section.js"
 import UserInfo from "../components/UserInfo.js";
+import UserPhoto from "../components/UserPhoto.js";
 import Api from "../components/Api";
 import {validateObject} from "../utils/constants.js";
 
@@ -12,10 +13,12 @@ import './index.css';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-let userId;
+const editUserPhoto = document.querySelector('.profile__image');
+
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupAskDelete = document.querySelector('.popup_type_delete');
+const popupUserPhoto = document.querySelector('.popup_type_user-photo');
 
 const popupWithImage = new PopupWithImage('.popup_type_open-image');
 const popupCardDelete = new Popup('.popup_type_delete')
@@ -107,14 +110,21 @@ const userInfo = new UserInfo({
   infoSelector: profileDescription
 });
 
+const userPhoto = new UserPhoto(editUserPhoto);
 
 // PATCH PROFILE INFO
 function getProfileInfo() {
   const information = userInfo.getUserInfo();
-  console.log(information);
   name.value = information.name;
   description.value = information.info;
 }
+
+const popupWithProfile = new PopupWithForm({
+  popupSelector: '.popup_type_profile',
+  submitAction: (data) => {
+    changeProfileInfo(data)
+  }
+})
 
 function changeProfileInfo(data) {
   return api.patchUserInfo(data)
@@ -124,13 +134,6 @@ function changeProfileInfo(data) {
           userInfo.setUserInfo({nickname, description});
         });
 }
-
-const popupWithProfile = new PopupWithForm({
-  popupSelector: '.popup_type_profile',
-  submitAction: (data) => {
-    changeProfileInfo(data)
-  }
-})
 
 // POST NEW CARD
 const popupWithCard = new PopupWithForm({
@@ -147,13 +150,14 @@ const popupWithCard = new PopupWithForm({
   }
 })
 
-// GET INITIAL INFO AND CARDS
+// GET INITIAL INFO, AVATAR AND CARDS
 Promise.all([api.getInitialCards(), api.getUserInfo()])
 .then((data) => {
   const userId = data[1]._id;
   const nickname = data[1].name;
   const description = data[1].about;
   userInfo.setUserInfo({nickname, description});
+  userPhoto.setUserPhoto(data[1]);
 
   const initialCardList = new Section({
     data: data[0],
@@ -165,7 +169,17 @@ Promise.all([api.getInitialCards(), api.getUserInfo()])
 })
 .catch(err => console.log(err))
 
-
+// PATCH AVATAR
+const popupWithUserPhoto = new PopupWithForm({
+  popupSelector: '.popup_type_user-photo',
+  submitAction: (data) => {
+    api.patchUserAvatar(data)
+    .then((data) => {
+      userPhoto.setUserPhoto(data);
+    })
+    .catch(err => console.log(err))
+  }
+})
 
 
 
@@ -182,6 +196,12 @@ Promise.all([api.getInitialCards(), api.getUserInfo()])
 popupWithProfile.setEventListeners();
 popupWithCard.setEventListeners();
 popupWithImage.setEventListeners();
+popupWithUserPhoto.setEventListeners();
+
+editUserPhoto.addEventListener('click', () => {
+  popupWithUserPhoto.open();
+  addCardValidation.resetValidation();
+})
 
 addButton.addEventListener('click', () => {
   popupWithCard.open();
