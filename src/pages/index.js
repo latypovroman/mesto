@@ -18,7 +18,6 @@ const editUserPhoto = document.querySelector('.profile__image');
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupAskDelete = document.querySelector('.popup_type_delete');
-const popupUserPhoto = document.querySelector('.popup_type_user-photo');
 
 const popupWithImage = new PopupWithImage('.popup_type_open-image');
 const popupCardDelete = new Popup('.popup_type_delete');
