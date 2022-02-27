@@ -55,7 +55,7 @@ function handleCardClick(name, link) {
   popupWithImage.open(name, link);
 }
 
-function createCard(userId = 1, data) {
+function createCard(userId, data) {
   const card = new Card (
     userId,
     data,
@@ -78,25 +78,30 @@ function createCard(userId = 1, data) {
 
       },
       handleLikeClick: () => {
-        function updateCount(data) {
-          card._likeCounter.textContent = data.likes.length
-        }
+        if (card.isLiked(data.likes)) {
 
-        if (card.isLiked()) {
-
-          api.putLike(data)
-          .then((data) => updateCount(data))
+          api.deleteLike(data)
+          .then((res) => {
+            card.updateLikeCount(res.likes.length);
+            card.likeToggle(data.likes);
+            data.likes = res.likes;
+          })
           .catch((err) => {
             console.log(err)
           })
 
         } else {
 
-          api.deleteLike(data)
-          .then((data) => updateCount(data))
+          api.putLike(data)
+          .then((res) => {
+            card.updateLikeCount(res.likes.length);
+            card.likeToggle(data.likes);
+            data.likes = res.likes;
+          })
           .catch((err) => {
             console.log(err)
           })
+
         }
       }
   });
@@ -122,7 +127,6 @@ function getProfileInfo() {
 const popupWithProfile = new PopupWithForm({
   popupSelector: '.popup_type_profile',
   submitAction: (data) => {
-    // popupWithProfile.renderLoading(true);
     changeProfileInfo(data);
 
   }
@@ -145,7 +149,6 @@ function changeProfileInfo(data) {
 const popupWithCard = new PopupWithForm({
   popupSelector: '.popup_type_add-card',
   submitAction: (data) => {
-    // popupWithCard.renderLoading(true);
     Promise.all([api.postNewCard(data), api.getUserInfo()])
     .then((data) => {
       const userId = data[1]._id;
@@ -181,7 +184,6 @@ Promise.all([api.getInitialCards(), api.getUserInfo()])
 const popupWithUserPhoto = new PopupWithForm({
   popupSelector: '.popup_type_user-photo',
   submitAction: (data) => {
-    // popupWithUserPhoto.renderLoading(true);
     api.patchUserAvatar(data)
     .then((data) => {
       userPhoto.setUserPhoto(data);

@@ -10,13 +10,10 @@ export default class PopupWithForm extends Popup {
   }
 
   renderLoading(isLoading) {
-    debugger;
     if (isLoading) {
       this._button.textContent = "Сохранение...";
      } else {
-      console.log(this._originalButtonText)
       this._button.textContent = this._originalButtonText;
-
     }
   }
 
