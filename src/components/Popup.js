@@ -14,7 +14,7 @@ export default class Popup {
   close() {
     this._popup.classList.remove('popup_opened');
     this._page.classList.remove('page_scroll_disable');
-    document.removeEventListener('keydown', this._handleEscClose)
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 
   _handleEscClose(evt) {
@@ -31,6 +31,6 @@ export default class Popup {
       if (evt.target.classList.contains('popup__close')) {
         this.close();
       }
-  })
+    })
   }
 }

@@ -2,7 +2,8 @@ import Card from "../components/Card.js"
 import FormValidator from "../components/FormValidator.js"
 import PopupWithImage from "../components/PopupWithImage.js";
 import PopupWithForm from "../components/PopupWithForm.js";
-import Popup from "../components/Popup.js";
+import PopupCardDelete from "../components/PopupCardDelete.js";
+
 import Section from "../components/Section.js"
 import UserInfo from "../components/UserInfo.js";
 import UserPhoto from "../components/UserPhoto.js";
@@ -18,13 +19,15 @@ const editUserPhoto = document.querySelector('.profile__image');
 const popupProfile = document.querySelector('.popup_type_profile');
 const popupAddCard = document.querySelector('.popup_type_add-card');
 const popupAskDelete = document.querySelector('.popup_type_delete');
+const popupEditUserPhoto = document.querySelector('.popup_type_user-photo');
 
 const popupWithImage = new PopupWithImage('.popup_type_open-image');
-const popupCardDelete = new Popup('.popup_type_delete');
+
 
 const formProfile = popupProfile.querySelector('.popup__form');
 const formAddCard = popupAddCard.querySelector('.popup__form');
 const formCardDelete = popupAskDelete.querySelector('.popup__form');
+const formEditUserPhoto = popupEditUserPhoto.querySelector('.popup__form');
 
 const name = document.querySelector('#nickname');
 const description = document.querySelector('#description');
@@ -35,8 +38,9 @@ const cardList = document.querySelector('.cards__list');
 // настройка валидации
 const profileValidation =  new FormValidator(validateObject, formProfile);
 const addCardValidation = new FormValidator(validateObject, formAddCard);
+const editUserPhotoValidation = new FormValidator(validateObject, formEditUserPhoto)
 
-const initialValidationForms = [profileValidation, addCardValidation];
+const initialValidationForms = [profileValidation, addCardValidation, editUserPhotoValidation];
 
 initialValidationForms.forEach( function(item) {
   item.enableValidation();
@@ -49,7 +53,6 @@ const api = new Api({
     'Content-Type': 'application/json'},
 });
 
-// GET INITIAL CARDS
 function handleCardClick(name, link) {
   popupWithImage.open(name, link);
 }
@@ -62,18 +65,21 @@ function createCard(userId, data) {
     {
       handleCardClick,
       handleDeleteClick: () => {
-
+        const popupCardDelete = new PopupCardDelete('.popup_type_delete', popupCardDeleteSubmitAction);
         popupCardDelete.open();
         popupCardDelete.setEventListeners();
-        formCardDelete.addEventListener('submit', (evt) => {
+
+        function popupCardDeleteSubmitAction(evt) {
           evt.preventDefault();
           card.deleteCard();
           api.deleteCard(data)
           .catch((err) => {
             console.log(err)
           })
-          popupCardDelete.close();
-        })
+          popupCardDelete.close(popupCardDeleteSubmitAction);
+        }
+
+        formCardDelete.addEventListener('submit', popupCardDeleteSubmitAction);
 
       },
       handleLikeClick: () => {
@@ -127,21 +133,25 @@ const popupWithProfile = new PopupWithForm({
   popupSelector: '.popup_type_profile',
   submitAction: (data) => {
     changeProfileInfo(data);
-
+    popupWithProfile.close();
   }
 })
 
 function changeProfileInfo(data) {
   return api.patchUserInfo(data)
         .then((result) => {
+
           const nickname = result.name;
           const description = result.about;
           userInfo.setUserInfo({nickname, description});
+
         })
         .catch((err) => {
           console.log(err)
         })
-        .finally(popupWithProfile.renderLoading(false))
+        .finally(() => {
+          popupWithProfile.renderLoading(false);
+        });
 }
 
 // POST NEW CARD
@@ -156,7 +166,10 @@ const popupWithCard = new PopupWithForm({
     .catch((err) => {
       console.log(err)
     })
-    .finally(popupWithCard.renderLoading(false));
+    .finally(() => {
+      popupWithCard.renderLoading(false);
+    });
+    popupWithCard.close();
   }
 })
 
@@ -188,22 +201,14 @@ const popupWithUserPhoto = new PopupWithForm({
       userPhoto.setUserPhoto(data);
     })
     .catch(err => console.log(err))
-    .finally(popupWithUserPhoto.renderLoading(false))
+    .finally(() => {
+      popupWithUserPhoto.renderLoading(false);
+    });
+    popupWithUserPhoto.close();
   }
 })
 
-
-
-
-
-
-
-
-
-
-
-
-// слушатели
+// LISTENERS
 popupWithProfile.setEventListeners();
 popupWithCard.setEventListeners();
 popupWithImage.setEventListeners();
