@@ -65,7 +65,7 @@ export default class Card {
     this._cardDelete.closest('.card').remove();
   }
 
-  likeToggle(likesArray) {
+  toggleLike(likesArray) {
     this.isLiked(likesArray) ?  this._deleteLike() : this._putLike();
   }
 

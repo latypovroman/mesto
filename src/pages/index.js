@@ -77,10 +77,8 @@ function createCard(userId, data) {
             console.log(err)
           })
           popupCardDelete.close(popupCardDeleteSubmitAction);
+          formCardDelete.removeEventListener('submit', popupCardDeleteSubmitAction);
         }
-
-        formCardDelete.addEventListener('submit', popupCardDeleteSubmitAction);
-
       },
       handleLikeClick: () => {
         if (card.isLiked(data.likes)) {
@@ -88,7 +86,7 @@ function createCard(userId, data) {
           api.deleteLike(data)
           .then((res) => {
             card.updateLikeCount(res.likes.length);
-            card.likeToggle(data.likes);
+            card.toggleLike(data.likes);
             data.likes = res.likes;
           })
           .catch((err) => {
@@ -100,7 +98,7 @@ function createCard(userId, data) {
           api.putLike(data)
           .then((res) => {
             card.updateLikeCount(res.likes.length);
-            card.likeToggle(data.likes);
+            card.toggleLike(data.likes);
             data.likes = res.likes;
           })
           .catch((err) => {
@@ -216,7 +214,7 @@ popupWithUserPhoto.setEventListeners();
 
 editUserPhoto.addEventListener('click', () => {
   popupWithUserPhoto.open();
-  addCardValidation.resetValidation();
+  editUserPhotoValidation.resetValidation();
 })
 
 addButton.addEventListener('click', () => {
