@@ -6,7 +6,6 @@ import PopupCardDelete from "../components/PopupCardDelete.js";
 
 import Section from "../components/Section.js"
 import UserInfo from "../components/UserInfo.js";
-import UserPhoto from "../components/UserPhoto.js";
 import Api from "../components/Api";
 import {validateObject} from "../utils/constants.js";
 
@@ -14,37 +13,31 @@ import './index.css';
 
 const editButton = document.querySelector('.profile__edit-button');
 const addButton = document.querySelector('.profile__add-button');
-const editUserPhoto = document.querySelector('.profile__image');
-
-const popupProfile = document.querySelector('.popup_type_profile');
-const popupAddCard = document.querySelector('.popup_type_add-card');
-const popupAskDelete = document.querySelector('.popup_type_delete');
-const popupEditUserPhoto = document.querySelector('.popup_type_user-photo');
+const userPhoto = document.querySelector('.profile__image');
 
 const popupWithImage = new PopupWithImage('.popup_type_open-image');
 
 
-const formProfile = popupProfile.querySelector('.popup__form');
-const formAddCard = popupAddCard.querySelector('.popup__form');
-const formCardDelete = popupAskDelete.querySelector('.popup__form');
-const formEditUserPhoto = popupEditUserPhoto.querySelector('.popup__form');
-
 const name = document.querySelector('#nickname');
 const description = document.querySelector('#description');
-const profileName = document.querySelector('.profile__name');
-const profileDescription = document.querySelector('.profile__description');
 const cardList = document.querySelector('.cards__list');
 
-// настройка валидации
-const profileValidation =  new FormValidator(validateObject, formProfile);
-const addCardValidation = new FormValidator(validateObject, formAddCard);
-const editUserPhotoValidation = new FormValidator(validateObject, formEditUserPhoto)
+const formValidators = {}
 
-const initialValidationForms = [profileValidation, addCardValidation, editUserPhotoValidation];
 
-initialValidationForms.forEach( function(item) {
-  item.enableValidation();
-});
+const enableValidation = (validateObject) => {
+  const formList = Array.from(document.querySelectorAll(validateObject.formSelector));
+  formList.forEach((formElement) => {
+    const validator = new FormValidator(validateObject, formElement);
+
+    const formName = formElement.getAttribute('name');
+
+    formValidators[formName] = validator;
+   validator.enableValidation();
+  });
+};
+
+enableValidation(validateObject);
 
 const api = new Api({
   url: 'https://mesto.nomoreparties.co/v1/cohort36',
@@ -57,6 +50,8 @@ function handleCardClick(name, link) {
   popupWithImage.open(name, link);
 }
 
+const popupCardDelete = new PopupCardDelete('.popup_type_delete');
+
 function createCard(userId, data) {
   const card = new Card (
     userId,
@@ -65,20 +60,18 @@ function createCard(userId, data) {
     {
       handleCardClick,
       handleDeleteClick: () => {
-        const popupCardDelete = new PopupCardDelete('.popup_type_delete', popupCardDeleteSubmitAction);
-        popupCardDelete.open();
-        popupCardDelete.setEventListeners();
-
-        function popupCardDeleteSubmitAction(evt) {
-          evt.preventDefault();
-          card.deleteCard();
+        function popupCardDeleteAction() {
           api.deleteCard(data)
+          .then(() => {
+            card.deleteCard();
+            popupCardDelete.close();
+          })
           .catch((err) => {
             console.log(err)
           })
-          popupCardDelete.close(popupCardDeleteSubmitAction);
-          formCardDelete.removeEventListener('submit', popupCardDeleteSubmitAction);
         }
+        popupCardDelete.getSubmitAction(popupCardDeleteAction);
+        popupCardDelete.open();
       },
       handleLikeClick: () => {
         if (card.isLiked(data.likes)) {
@@ -114,11 +107,10 @@ function createCard(userId, data) {
 
 // GET INITIAL PROFILE INFO
 const userInfo = new UserInfo({
-  nameSelector: profileName,
-  infoSelector: profileDescription
+  nameSelector: '.profile__name',
+  infoSelector: '.profile__description',
+  photoSelector: '.profile__image'
 });
-
-const userPhoto = new UserPhoto(editUserPhoto);
 
 // PATCH PROFILE INFO
 function getProfileInfo() {
@@ -131,19 +123,16 @@ const popupWithProfile = new PopupWithForm({
   popupSelector: '.popup_type_profile',
   submitAction: (data) => {
     changeProfileInfo(data);
-    popupWithProfile.close();
   }
 })
 
 function changeProfileInfo(data) {
   return api.patchUserInfo(data)
         .then((result) => {
-
-          const nickname = result.name;
-          const description = result.about;
-          userInfo.setUserInfo({nickname, description});
-
+          console.log(result)
+          userInfo.setUserInfo(result);
         })
+        .then(() => popupWithProfile.close())
         .catch((err) => {
           console.log(err)
         })
@@ -174,12 +163,9 @@ const popupWithCard = new PopupWithForm({
 // GET INITIAL INFO, AVATAR AND CARDS
 Promise.all([api.getInitialCards(), api.getUserInfo()])
 .then((data) => {
-  const userId = data[1]._id;
-  const nickname = data[1].name;
-  const description = data[1].about;
-  userInfo.setUserInfo({nickname, description});
-  userPhoto.setUserPhoto(data[1]);
 
+  userInfo.setUserInfo(data[1]);
+  const userId = userInfo.getUserId();
   const initialCardList = new Section({
     data: data[0],
     renderer: (item) => {
@@ -196,7 +182,7 @@ const popupWithUserPhoto = new PopupWithForm({
   submitAction: (data) => {
     api.patchUserAvatar(data)
     .then((data) => {
-      userPhoto.setUserPhoto(data);
+      userInfo.setUserInfo(data);
     })
     .catch(err => console.log(err))
     .finally(() => {
@@ -206,24 +192,26 @@ const popupWithUserPhoto = new PopupWithForm({
   }
 })
 
+console.log(formValidators);
 // LISTENERS
-popupWithProfile.setEventListeners();
-popupWithCard.setEventListeners();
-popupWithImage.setEventListeners();
-popupWithUserPhoto.setEventListeners();
+// popupWithProfile.setEventListeners();
+// popupWithCard.setEventListeners();
+// popupWithImage.setEventListeners();
+// popupWithUserPhoto.setEventListeners();
+// popupCardDelete.setEventListeners();
 
-editUserPhoto.addEventListener('click', () => {
+userPhoto.addEventListener('click', () => {
   popupWithUserPhoto.open();
-  editUserPhotoValidation.resetValidation();
+  formValidators.photo.resetValidation();
 })
 
 addButton.addEventListener('click', () => {
   popupWithCard.open();
-  addCardValidation.resetValidation();
+  formValidators.card.resetValidation();
   });
 
 editButton.addEventListener('click', () => {
     popupWithProfile.open();
     getProfileInfo();
-    profileValidation.resetValidation();
+    formValidators.bio.resetValidation();
   });

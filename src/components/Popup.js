@@ -8,13 +8,13 @@ export default class Popup {
   open() {
     this._popup.classList.add('popup_opened');
     this._page.classList.add('page_scroll_disable');
-    document.addEventListener('keydown', this._handleEscClose)
+    this._setEventListeners();
   }
 
   close() {
     this._popup.classList.remove('popup_opened');
     this._page.classList.remove('page_scroll_disable');
-    document.removeEventListener('keydown', this._handleEscClose);
+    this._removeEventListeners();
   }
 
   _handleEscClose(evt) {
@@ -23,7 +23,7 @@ export default class Popup {
     }
   }
 
-  setEventListeners() {
+  _setEventListeners() {
     this._popup.addEventListener('mousedown', (evt) => {
       if (evt.target.classList.contains('popup_opened')) {
         this.close();
@@ -32,5 +32,11 @@ export default class Popup {
         this.close();
       }
     })
+
+    document.addEventListener('keydown', this._handleEscClose)
+  }
+
+  _removeEventListeners() {
+    document.removeEventListener('keydown', this._handleEscClose);
   }
 }

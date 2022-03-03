@@ -26,7 +26,7 @@ export default class Card {
     return document.querySelector(this._cardSelector).content.querySelector('.card').cloneNode(true);
   }
 
-  generateCard() {
+  generateCard(userId, data) {
 
 
     this._cardImage = this._template.querySelector('.card__image');
