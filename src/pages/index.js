@@ -17,10 +17,10 @@ const userPhoto = document.querySelector('.profile__image');
 
 const popupWithImage = new PopupWithImage('.popup_type_open-image');
 
+let userId;
 
 const name = document.querySelector('#nickname');
 const description = document.querySelector('#description');
-const cardList = document.querySelector('.cards__list');
 
 const formValidators = {}
 
@@ -78,8 +78,7 @@ function createCard(userId, data) {
 
           api.deleteLike(data)
           .then((res) => {
-            card.updateLikeCount(res.likes.length);
-            card.toggleLike(data.likes);
+            card.updateLikes(res);
             data.likes = res.likes;
           })
           .catch((err) => {
@@ -90,8 +89,7 @@ function createCard(userId, data) {
 
           api.putLike(data)
           .then((res) => {
-            card.updateLikeCount(res.likes.length);
-            card.toggleLike(data.likes);
+            card.updateLikes(res);
             data.likes = res.likes;
           })
           .catch((err) => {
@@ -141,14 +139,29 @@ function changeProfileInfo(data) {
         });
 }
 
+// GET INITIAL INFO, AVATAR AND CARDS
+const initialCardList = new Section({
+  renderer: (item) => {
+    return createCard(userId, item);
+  }
+}, '.cards__list');
+
+Promise.all([api.getInitialCards(), api.getUserInfo()])
+.then(([cards, userData]) => {
+  userInfo.setUserInfo(userData);
+  userId = userInfo.getUserId();
+  initialCardList.renderItems(cards);
+})
+.catch(err => console.log(err))
+
+
 // POST NEW CARD
 const popupWithCard = new PopupWithForm({
   popupSelector: '.popup_type_add-card',
   submitAction: (data) => {
-    Promise.all([api.postNewCard(data), api.getUserInfo()])
-    .then((data) => {
-      const userId = data[1]._id;
-      cardList.prepend(createCard(userId, data[0]));
+    api.postNewCard(data)
+    .then((item) => {
+      initialCardList.prependItem(item);
     })
     .catch((err) => {
       console.log(err)
@@ -159,22 +172,6 @@ const popupWithCard = new PopupWithForm({
     popupWithCard.close();
   }
 })
-
-// GET INITIAL INFO, AVATAR AND CARDS
-Promise.all([api.getInitialCards(), api.getUserInfo()])
-.then((data) => {
-
-  userInfo.setUserInfo(data[1]);
-  const userId = userInfo.getUserId();
-  const initialCardList = new Section({
-    data: data[0],
-    renderer: (item) => {
-      initialCardList.setItem(createCard(userId, item));
-    }
-  }, '.cards__list');
-  initialCardList.renderItems();
-})
-.catch(err => console.log(err))
 
 // PATCH AVATAR
 const popupWithUserPhoto = new PopupWithForm({
@@ -192,14 +189,7 @@ const popupWithUserPhoto = new PopupWithForm({
   }
 })
 
-console.log(formValidators);
 // LISTENERS
-// popupWithProfile.setEventListeners();
-// popupWithCard.setEventListeners();
-// popupWithImage.setEventListeners();
-// popupWithUserPhoto.setEventListeners();
-// popupCardDelete.setEventListeners();
-
 userPhoto.addEventListener('click', () => {
   popupWithUserPhoto.open();
   formValidators.photo.resetValidation();

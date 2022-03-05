@@ -26,7 +26,7 @@ export default class Card {
     return document.querySelector(this._cardSelector).content.querySelector('.card').cloneNode(true);
   }
 
-  generateCard(userId, data) {
+  generateCard() {
 
 
     this._cardImage = this._template.querySelector('.card__image');
@@ -39,7 +39,7 @@ export default class Card {
     this._cardImage.alt = this._name;
     this._cardText.textContent = this._name;
     this._likeSetStyle();
-    this.updateLikeCount(this._likes.length);
+    this._updateLikeCount(this._likes.length);
     this._handleDeleteButton();
     this._setEventListeners();
 
@@ -65,7 +65,7 @@ export default class Card {
     this._cardDelete.closest('.card').remove();
   }
 
-  toggleLike(likesArray) {
+  _toggleLike(likesArray) {
     this.isLiked(likesArray) ?  this._deleteLike() : this._putLike();
   }
 
@@ -96,7 +96,13 @@ export default class Card {
     this._cardLike.classList.remove('card__like-btn_active');
   }
 
-  updateLikeCount(amount) {
+  _updateLikeCount(amount) {
     this._likeCounter.textContent = amount
+  }
+
+  updateLikes(promiseResult) {
+    console.log(promiseResult);
+    this._updateLikeCount(promiseResult.likes.length);
+    this._toggleLike(this._likes);
   }
 }
