@@ -125,7 +125,6 @@ function changeProfileInfo(data) {
   return api
     .patchUserInfo(data)
     .then((result) => {
-      console.log(result);
       userInfo.setUserInfo(result);
     })
     .then(() => popupWithProfile.close())
@@ -163,6 +162,7 @@ const popupWithCard = new PopupWithForm({
       .postNewCard(data)
       .then((item) => {
         initialCardList.prependItem(item);
+        popupWithCard.close();
       })
       .catch((err) => {
         console.log(err);
@@ -170,7 +170,6 @@ const popupWithCard = new PopupWithForm({
       .finally(() => {
         popupWithCard.renderLoading(false);
       });
-    popupWithCard.close();
   },
 });
 
@@ -182,12 +181,12 @@ const popupWithUserPhoto = new PopupWithForm({
       .patchUserAvatar(data)
       .then((data) => {
         userInfo.setUserInfo(data);
+        popupWithUserPhoto.close();
       })
       .catch((err) => console.log(err))
       .finally(() => {
         popupWithUserPhoto.renderLoading(false);
       });
-    popupWithUserPhoto.close();
   },
 });
 

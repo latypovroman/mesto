@@ -38,7 +38,7 @@ export default class Card {
     this._cardImage.src = this._link;
     this._cardImage.alt = this._name;
     this._cardText.textContent = this._name;
-    this._likeSetStyle();
+    this._likeSetStyle(this._likes);
     this._updateLikeCount(this._likes.length);
     this._handleDeleteButton();
     this._setEventListeners();
@@ -69,8 +69,8 @@ export default class Card {
     this.isLiked(likesArray) ?  this._deleteLike() : this._putLike();
   }
 
-  _likeSetStyle() {
-    return this.isLiked(this._likes) ?  this._putLike() : this._deleteLike();
+  _likeSetStyle(likesArray) {
+    return this.isLiked(likesArray) ?  this._putLike() : this._deleteLike();
   }
 
   isLiked(likesArray) {
@@ -101,8 +101,8 @@ export default class Card {
   }
 
   updateLikes(promiseResult) {
-    console.log(promiseResult);
     this._updateLikeCount(promiseResult.likes.length);
     this._toggleLike(this._likes);
+    this._likeSetStyle(promiseResult.likes);
   }
 }
