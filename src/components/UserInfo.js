@@ -22,8 +22,4 @@ export default class UserInfo {
   getUserId() {
     return this._myId;
   }
-
-  setUserPhoto(data) {
-    this._photo.src = avatar;
-  }
 }
