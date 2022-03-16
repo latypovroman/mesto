@@ -10,4 +10,5 @@
 
 
 [Ссылка на GitHub Pages](https://latypovroman.github.io/mesto/)
+
 [Также есть версия приложения на Реакте](https://latypovroman.github.io/mesto-react/)
